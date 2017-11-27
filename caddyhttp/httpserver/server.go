@@ -374,7 +374,9 @@ func (s *Server) serveHTTP(w http.ResponseWriter, r *http.Request) (int, error) 
 	if err != nil {
 		hostname = r.Host
 	}
-
+	if r.Method == http.MethodConnect {
+		hostname = ""
+	}
 	// look up the virtualhost; if no match, serve error
 	vhost, pathPrefix := s.vhosts.Match(hostname + r.URL.Path)
 	c := context.WithValue(r.Context(), caddy.CtxKey("path_prefix"), pathPrefix)
